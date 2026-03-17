@@ -227,6 +227,40 @@ function handleInput(event) {
 
 inputEl.addEventListener("keydown", handleInput);
 
+// Keep cursor in focus so you don't have to click on the input field to type
+document.addEventListener("keydown", (event) => {
+  if (!viDOM.classList.contains("hidden")) {
+    return;
+  }
+
+  if (event.target === inputEl) {
+    return;
+  }
+
+  if (event.key.length > 1 && event.key !== "Backspace" && event.key !== "Enter") {
+    return;
+  }
+
+  event.preventDefault();
+
+  inputEl.focus();
+
+  if (event.key === "Backspace") {
+    inputEl.value = inputEl.value.slice(0, -1);
+    return;
+  }
+
+  if (event.key === "Enter") {
+    const synthetic = new KeyboardEvent("keydown", { keyCode: 13, which: 13 });
+    inputEl.dispatchEvent(synthetic);
+    return;
+  }
+
+  if (event.key.length === 1) {
+    inputEl.value += event.key;
+  }
+});
+
 // Autoscroll function
 const target = document.querySelector("#output");
 
